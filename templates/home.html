@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heladería - Menú</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+        header {
+            background-color: #ff6f61;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+        }
+        main {
+            padding: 2rem;
+        }
+        .productos-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            justify-content: center;
+        }
+        .producto-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+        .producto-card:hover {
+            transform: scale(1.05);
+        }
+        .producto-titulo {
+            font-size: 1.25rem;
+            margin: 0.5rem 0;
+            color: #ff6f61;
+        }
+        .producto-detalle {
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+            color: #555;
+        }
+        .producto-precio {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Menú de la Heladería</h1>
+    </header>
+    <main>
+        <h2 style="text-align: center;">Nuestros Productos</h2>
+        <div class="productos-container">
+            {% for producto in productos %}
+            <div class="producto-card">
+                <h3 class="producto-titulo">{{ producto.nombre }}</h3>
+                <p class="producto-detalle">Tipo: {{ producto.__class__.__name__ }}</p>
+                <p class="producto-detalle">Ingredientes: 
+                    {% for ingrediente in producto.ingredientes %}
+                        {{ ingrediente.nombre }}{% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                </p>
+                <p class="producto-precio">Precio: ${{ producto.precio_publico }}</p>
+            </div>
+            {% else %}
+            <p style="text-align: center; font-size: 1.2rem; color: #777;">No hay productos disponibles en el menú.</p>
+            {% endfor %}
+        </div>
+    </main>
+</body>
+</html>

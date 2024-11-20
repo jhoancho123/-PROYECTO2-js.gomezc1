@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heladería Web</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Heladería Online</h1>
+        <nav>
+            <a href="/">Inicio</a>
+            <a href="/agregar_producto">Agregar Producto</a>
+            <a href="/agregar_ingrediente">Agregar Ingrediente</a>
+            <a href="/vender">Vender</a>
+            <a href="/reporte_ventas">Reporte de Ventas</a>
+        </nav>
+    </header>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    <footer>
+        <p>&copy; 2024 Heladería Web</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Vender Producto</h2>
+<form action="/vender" method="POST">
+    <label for="nombre_producto">Nombre del producto:</label>
+    <input type="text" id="nombre_producto" name="nombre_producto" required><br><br>
+
+    <button type="submit">Vender</button>
+</form>
+{% endblock %}

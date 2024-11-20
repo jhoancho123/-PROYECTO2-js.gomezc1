@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Agregar Producto</h2>
+<form action="/agregar_producto" method="POST">
+    <label for="nombre">Nombre del producto:</label>
+    <input type="text" id="nombre" name="nombre" required><br><br>
+
+    <label for="precio">Precio público:</label>
+    <input type="number" id="precio" name="precio" step="0.01" required><br><br>
+
+    <label for="tipo">Tipo:</label>
+    <select id="tipo" name="tipo">
+        <option value="Copa">Copa</option>
+        <option value="Malteada">Malteada</option>
+    </select><br><br>
+
+    <label for="ingredientes">Ingredientes (IDs separados por comas):</label>
+    <input type="text" id="ingredientes" name="ingredientes" required><br><br>
+
+    <button type="submit">Agregar</button>
+</form>
+{% endblock %}
