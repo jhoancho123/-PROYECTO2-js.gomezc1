@@ -1,5 +1,5 @@
 import unittest
-from heladeria import Heladeria, Base, Complemento, Copa, Malteada
+from controllers.heladeria_controller import Heladeria, Base, Complemento, Copa, Malteada
 
 
 class TestHeladeria(unittest.TestCase):
