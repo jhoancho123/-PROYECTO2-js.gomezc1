@@ -1,45 +1,43 @@
-from flask import request, jsonify
-from flask_jwt_extended import create_access_token
-from app.models.user import Usuario, db
+from flask import request, jsonify, session
+from models import user, db
+from utils.responses import unauthorized, success, bad_request
 
-def registro():
+def registrar_user():
     """
-    Controlador para registrar un nuevo usuario.
+    Endpoint para registrar un nuevo user.
     """
-    data = request.get_json()
+    datos = request.get_json()
+    username = datos.get('username')
+    password = datos.get('password')
+    es_admin = datos.get('es_admin', False)
+    es_empleado = datos.get('es_empleado', False)
 
-    if not all(key in data for key in ("nombre", "email", "password")):
-        return jsonify({"error": "Faltan campos requeridos"}), 400
+    if not username or not password:
+        return bad_request("El nombre de user y la contraseña son obligatorios.")
+    
+    if user.query.filter_by(username=username).first():
+        return bad_request("El nombre de user ya está en uso.")
 
-    if Usuario.query.filter_by(email=data["email"]).first():
-        return jsonify({"error": "El email ya está registrado"}), 400
+    nuevo_user = user(username=username, password=password, es_admin=es_admin, es_empleado=es_empleado)
+    db.session.add(nuevo_user)
+    db.session.commit()
 
-    try:
-        nuevo_usuario = Usuario(
-            nombre=data["nombre"],
-            email=data["email"],
-            password_hash=Usuario.generar_password_hash(data["password"])
-        )
-        db.session.add(nuevo_usuario)
-        db.session.commit()
+    return success(f"user '{username}' creado exitosamente.")
 
-        return jsonify({"message": "Usuario registrado exitosamente"}), 201
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({"error": str(e)}), 500
-
-def login():
+def autenticar_user():
     """
-    Controlador para autenticar a un usuario.
+    Endpoint para autenticar un user.
     """
-    data = request.get_json()
+    datos = request.get_json()
+    username = datos.get('username')
+    password = datos.get('password')
 
-    if not all(key in data for key in ("email", "password")):
-        return jsonify({"error": "Faltan campos requeridos"}), 400
+    user = user.autenticar(username, password)
+    if not user:
+        return unauthorized("Nombre de user o contraseña incorrectos.")
+    
+    session['user_id'] = user.id
+    session['es_admin'] = user.es_admin
+    session['es_empleado'] = user.es_empleado
 
-    usuario = Usuario.query.filter_by(email=data["email"]).first()
-    if not usuario or not usuario.verificar_password(data["password"]):
-        return jsonify({"error": "Credenciales inválidas"}), 401
-
-    access_token = create_access_token(identity=usuario.id)
-    return jsonify({"access_token": access_token}), 200
+    return success(f"user '{username}' autenticado exitosamente.")
